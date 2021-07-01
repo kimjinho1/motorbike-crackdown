@@ -64,14 +64,14 @@ def postprocess(frame, outs):
     if not boxes:
         return None
     
+    result = []
+    # 같은 물체에 대해서 박스가 많은 것을 제거 -> Non maximum suppresion
     indices = cv2.dnn.NMSBoxes(boxes, confidences, confThreshold, nmsThreshold)
-    box = boxes[indices[0][0]]
-    x = box[0]
-    y = box[1]
-    w = box[2]
-    h = box[3]
-
-    return (x, y, w, h)
+    for i in indices:
+        x, y, w, h = boxes[i[0]]
+        result.append((x, y, w, h))
+    
+    return result
 
 
 # 번호판 탐지
@@ -104,19 +104,22 @@ def main():
     box_output = args.output_dir+args.img_name[:-4]+'_box.png'
 
     # 확실하게 탐지된 번호판이 있다면 번호판 이미지와 바운딩 박스를 포함한 전체 이미지를 저장
-    box = license_plate_detection(img)
-    if box:
-        x, y, w, h = box
-        # 번호판 이미지 저장
-        license_plate_img = img[y:y+h, x:x+w, ::]
-        cv2.imwrite(license_plate_output, license_plate_img.astype(np.uint8))
+    result = license_plate_detection(img)
 
-        # 바운딩 박스를 포함한 전체 이미지 저장
-        cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 3)
-        cv2.imwrite(box_output, img.astype(np.uint8))
-        print("Detect")
-    else:
+    if not result:
         print("Not detect")
+    else:
+        print(f"{len(result)} Detect")
+        box_img = img.copy()
+        for i, box in enumerate(result):
+            x, y, w, h = box
+            # 번호판 이미지 저장
+            license_plate_img = img[y:y+h, x:x+w, ::]
+            cv2.imwrite(f"{license_plate_output[:-4]}_{i}_{license_plate_output[-4:]}", license_plate_img.astype(np.uint8))
+
+            # 바운딩 박스를 포함한 전체 이미지 저장
+            cv2.rectangle(box_img, (x, y), (x+w, y+h), (0, 255, 0), 3)
+        cv2.imwrite(box_output, box_img.astype(np.uint8))
         
         
 if __name__ == "__main__":
