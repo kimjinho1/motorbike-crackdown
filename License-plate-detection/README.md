@@ -3,7 +3,7 @@
 **You can download model.weights file from [this link](https://drive.google.com/file/d/1vXjIoRWY0aIpYfhj3TnPUGdmJoHnWaOc/).**  
 **model.weights file should be in the weigths folder.**  
 
-## reference: [alitourani](https://github.com/alitourani/yolo-license-plate-detection)
+**reference: [alitourani](https://github.com/alitourani/yolo-license-plate-detection)**  
 
 
 ## Set up environment  
