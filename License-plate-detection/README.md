@@ -4,6 +4,10 @@
 
 **model.weights file should be in the weigths folder.**  
 
+## Set up environment  
+`pip install -r requirement.txt`  
+
+
 ## How to use
 --img_dir: input image directory, default="img/"  
 --img_name: input file name  
