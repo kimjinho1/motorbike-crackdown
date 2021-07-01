@@ -11,11 +11,8 @@ inpHeight = 416 # 608 # 입력 이미지 높이
 
 # 네트워크(모델) 생성
 def build_net():
-    # 탐지할 물체 설정 -> 번호판
-    classes = ['License Plate']
-
     # 네트워크(모델) 설정
-    modelConfiguration = "weights/darknet-yolov3.cfg"
+    modelConfiguration = "weights/model-yolov3.cfg"
     modelWeights = "weights/model.weights"
     net = cv2.dnn.readNetFromDarknet(modelConfiguration, modelWeights)
     net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
